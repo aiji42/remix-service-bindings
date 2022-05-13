@@ -29,7 +29,7 @@ npm install -D wrangler remix-service-bindings remix-esbuild-override
 ```js
 // remix.config.js
 const { withEsbuildOverride } = require("remix-esbuild-override");
-const remixServiceBindings = require("remix-service-bindings");
+const remixServiceBindings = require("remix-service-bindings").default;
 
 withEsbuildOverride((option, { isServer }) => {
   if (isServer) {
