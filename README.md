@@ -1,6 +1,6 @@
 # remix-service-bindings
 
-This is a sample project for using cloudflare workers [service bindings](https://developers.cloudflare.com/workers/learning/using-services/) in Remix.
+This is a plugin for using cloudflare workers [service bindings](https://developers.cloudflare.com/workers/learning/using-services/) in Remix.
 
 ![](https://user-images.githubusercontent.com/6711766/168193222-d314552a-9e02-419f-85b7-2fdaf2ff3087.png)
 
