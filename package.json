@@ -1,6 +1,7 @@
 {
   "name": "remix-service-bindings",
   "version": "0.0.0",
+  "description": "This is a plugin for using cloudflare workers service bindings in Remix.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
