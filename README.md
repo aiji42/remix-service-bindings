@@ -34,7 +34,7 @@ const remixServiceBindings = require("remix-service-bindings");
 withEsbuildOverride((option, { isServer }) => {
   if (isServer) {
     option.plugins = [
-      plugin(!process.env.BINDEE, "BINDEE", !!process.env.DEPLOY),
+      remixServiceBindings(!process.env.BINDEE, "BINDEE", !!process.env.DEPLOY),
       ...option.plugins,
     ];
   }
