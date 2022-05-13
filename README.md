@@ -98,7 +98,7 @@ main = "./build/index.js"
 bucket = "./public"
 
 [build]
-command = "DEPLOY=true CHILD=true npm run build"
+command = "DEPLOY=true BINDEE=true npm run build"
 ```
 
 package.json
