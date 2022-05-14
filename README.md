@@ -29,12 +29,12 @@ npm install -D wrangler remix-service-bindings remix-esbuild-override
 ```js
 // remix.config.js
 const { withEsbuildOverride } = require("remix-esbuild-override");
-const remixServiceBindings = require("remix-service-bindings");
+const remixServiceBindings = require("remix-service-bindings").default;
 
 withEsbuildOverride((option, { isServer }) => {
   if (isServer) {
     option.plugins = [
-      plugin(!process.env.BINDEE, "BINDEE", !!process.env.DEPLOY),
+      remixServiceBindings(!process.env.BINDEE, "BINDEE", !!process.env.DEPLOY),
       ...option.plugins,
     ];
   }
@@ -98,7 +98,7 @@ main = "./build/index.js"
 bucket = "./public"
 
 [build]
-command = "DEPLOY=true CHILD=true npm run build"
+command = "DEPLOY=true BINDEE=true npm run build"
 ```
 
 package.json
