@@ -13,24 +13,34 @@ const plugin = (
   active = false,
   option?: {
     appDirectory?: string;
-    exclude?: RegExp;
   }
 ): Plugin => ({
   name: "remix-service-bindings",
   setup(build) {
     if (!active) return;
+    const appRoot = (option?.appDirectory || "app").replace(/^\/|\/$/g, "");
+
+    if (isEdge)
+      build.onLoad(
+        { filter: new RegExp(`${appRoot}/entry\\.client\\.[jt]sx?$`) },
+        (args) => {
+          const { ext } = path.parse(args.path);
+          return {
+            contents: "",
+            loader: ext.replace(/^\./, "") as Loader,
+            resolveDir: path.dirname(args.path),
+          };
+        }
+      );
+
+    const filter = new RegExp(
+      `${appRoot}/(routes/.*|root|entry\\.server)\\.[jt]sx?$`
+    );
     build.onLoad(
       {
-        filter: new RegExp(
-          `${(option?.appDirectory || "app").replace(
-            /^\/|\/$/g,
-            ""
-          )}/routes/.*\\.(jsx?|tsx?)$`
-        ),
+        filter,
       },
       async (args) => {
-        if (option?.exclude && option.exclude.test(args.path)) return;
-
         const { ext } = path.parse(args.path);
         const src = project.createSourceFile(
           `tmp${ext}`,
@@ -66,8 +76,14 @@ const plugin = (
 
         if (!isEdge) {
           src.getExportedDeclarations().forEach((node, key) => {
-            if (key === "default")
+            if (["ErrorBoundary", "CatchBoundary", "default"].includes(key))
               node.forEach((n) => "remove" in n && n.remove());
+          });
+          src.getExportDeclarations().forEach((node) => {
+            node.getNamedExports().forEach((node) => {
+              if (["ErrorBoundary", "CatchBoundary"].includes(node.getName()))
+                node.remove();
+            });
           });
           src.removeDefaultExport();
         }
