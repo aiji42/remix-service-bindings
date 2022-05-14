@@ -19,20 +19,6 @@ const plugin = (
   setup(build) {
     if (!active) return;
     const appRoot = (option?.appDirectory || "app").replace(/^\/|\/$/g, "");
-
-    if (isEdge)
-      build.onLoad(
-        { filter: new RegExp(`${appRoot}/entry\\.client\\.[jt]sx?$`) },
-        (args) => {
-          const { ext } = path.parse(args.path);
-          return {
-            contents: "",
-            loader: ext.replace(/^\./, "") as Loader,
-            resolveDir: path.dirname(args.path),
-          };
-        }
-      );
-
     const filter = new RegExp(
       `${appRoot}/(routes/.*|root|entry\\.server)\\.[jt]sx?$`
     );
@@ -41,7 +27,9 @@ const plugin = (
         filter,
       },
       async (args) => {
-        const { ext } = path.parse(args.path);
+        const { ext, name } = path.parse(args.path);
+        if (isEdge && name.startsWith("__")) return;
+
         const src = project.createSourceFile(
           `tmp${ext}`,
           fs.readFileSync(args.path, "utf8"),
