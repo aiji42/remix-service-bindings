@@ -74,6 +74,14 @@ const plugin = (
             });
           });
           src.removeDefaultExport();
+          if (new RegExp(`${appRoot}/root\\.[jt]sx?$`).test(args.path)) {
+            src.addFunction({
+              name: "Root",
+              parameters: undefined,
+              statements: "return null",
+              isDefaultExport: true,
+            });
+          }
         }
 
         return {
