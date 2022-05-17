@@ -130,7 +130,6 @@ package.json
 
 ```json
 "scripts": {
-  "deploy": "npm run deploy:bindee && npm run deploy:edge",
   "deploy:edge": "wrangler publish -c wrangler.edge.toml",
   "deploy:bindee": "wrangler publish -c wrangler.bindee.toml",
 }
@@ -139,7 +138,9 @@ package.json
 ## Deploy
 
 ```bash
-npm run deploy
+npm run deploy:bindee
+rm -rf public/build
+npm run deploy:edge
 ```
 
 ## License
